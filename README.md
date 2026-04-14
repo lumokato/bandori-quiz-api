@@ -40,7 +40,7 @@ POSTGRES_PASSWORD=change-me
 - Portainer 的 Compose path 填 `docker-compose.yml`
 - 需要在 Portainer 中提供：`CORS_ORIGIN`、`API_DOMAIN`、`TRAEFIK_NETWORK`、`POSTGRES_NETWORK`、`POSTGRES_PASSWORD`
 - `docker-compose.yml` 默认通过 `infra-postgres:5432/bandori` 连接数据库，用户名固定为 `bandori`
-- `docker-compose.yml` 里的 Traefik 入口点固定为 `websecure`，证书解析器固定为 `letsencrypt`
+- `docker-compose.yml` 里的 Traefik 入口点固定为 `websecure`，证书解析器根据实际选择
 - 每次更新代码准备发布时，都要同步更新 `docker-compose.yml` 顶部的版本号锚点，`gitops.revision` 会随之变化并触发重新部署
 
 ## 仓库约定

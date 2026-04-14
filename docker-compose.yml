@@ -1,4 +1,4 @@
-x-app-version: &app_version "0.1.0"
+x-app-version: &app_version "0.1.1"
 
 services:
   bandori-quiz-api:
@@ -28,7 +28,7 @@ services:
       traefik.http.routers.bandori-quiz-api.rule: Host(`${API_DOMAIN}`)
       traefik.http.routers.bandori-quiz-api.entrypoints: websecure
       traefik.http.routers.bandori-quiz-api.tls: "true"
-      traefik.http.routers.bandori-quiz-api.tls.certresolver: letsencrypt
+      traefik.http.routers.bandori-quiz-api.tls.certresolver: cloudflare
       traefik.http.services.bandori-quiz-api.loadbalancer.server.port: "3000"
       gitops.revision: *app_version
     networks:
