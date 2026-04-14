@@ -1,0 +1,6 @@
+.git
+.venv
+__pycache__
+.tmp-pycache
+.env
+*.py[cod]

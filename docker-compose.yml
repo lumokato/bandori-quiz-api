@@ -1,0 +1,44 @@
+x-app-version: &app_version "0.1.0"
+
+services:
+  bandori-quiz-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bandori-quiz-api
+    restart: unless-stopped
+    environment:
+      TZ: "Asia/Shanghai"
+      PORT: "3000"
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      DATABASE_URL: postgresql://bandori:${POSTGRES_PASSWORD}@infra-postgres:5432/bandori
+    expose:
+      - "3000"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:3000/healthz', timeout=5).read()"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: ${TRAEFIK_NETWORK}
+      traefik.http.routers.bandori-quiz-api.rule: Host(`${API_DOMAIN}`)
+      traefik.http.routers.bandori-quiz-api.entrypoints: websecure
+      traefik.http.routers.bandori-quiz-api.tls: "true"
+      traefik.http.routers.bandori-quiz-api.tls.certresolver: letsencrypt
+      traefik.http.services.bandori-quiz-api.loadbalancer.server.port: "3000"
+      gitops.revision: *app_version
+    networks:
+      - traefik
+      - postgres
+
+networks:
+  traefik:
+    external: true
+    name: ${TRAEFIK_NETWORK}
+  postgres:
+    external: true
+    name: ${POSTGRES_NETWORK}
